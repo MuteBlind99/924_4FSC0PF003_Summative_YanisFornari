@@ -66,13 +66,66 @@ TEST(BehaviourTree, no_loop_one_child) {
 }
 
 TEST(BehaviourTree, no_loop_multiple_children) {
-  FAIL() << "Fill this test";
+  bool check_conditions = false;
+  bool action_executed = false;
+  NoLoop no_loop1;
+  NoLoop no_loop2;
+
+  no_loop1.Add(std::make_unique<Leaf>([&]{return simple_action(check_conditions, action_executed);}));
+  no_loop2.Add(std::make_unique<Leaf>([&]{return simple_action(check_conditions, action_executed);}));
+
+  EXPECT_EQ(no_loop1.Tick(), Status::kFailure);
+  EXPECT_EQ(no_loop2.Tick(), Status::kFailure);
+
+  check_conditions = true;
+  EXPECT_EQ(no_loop1.Tick(), Status::kRunning);
+  EXPECT_EQ(no_loop2.Tick(), Status::kRunning);
+
+  action_executed = true;
+  EXPECT_EQ(no_loop1.Tick(), Status::kSuccess);
+  EXPECT_EQ(no_loop1.Tick(), Status::kSuccess);
+  EXPECT_EQ(no_loop2.Tick(), Status::kSuccess);
+  EXPECT_EQ(no_loop2.Tick(), Status::kSuccess);
+
+
 }
 
 TEST(BehaviourTree, selector_one_child) {
-  FAIL() << "Fill this test";
+  bool check_conditions = false;
+  bool action_executed = false;
+  Selector selector;
+
+  selector.Add(std::make_unique<Leaf>([&]{return simple_action(check_conditions, action_executed);}));
+  EXPECT_EQ(selector.Tick(),Status::kFailure);
+  selector.Reset();
+  check_conditions = true;
+  EXPECT_EQ(selector.Tick(), Status::kRunning);
+
+  action_executed = true;
+  EXPECT_EQ(selector.Tick(), Status::kSuccess);
+  EXPECT_EQ(selector.Tick(), Status::kSuccess);
+
 }
 
 TEST(BehaviourTree, selector_multiple_children) {
-  FAIL() << "Fill this test";
+  bool check_conditions = false;
+  bool action_executed = false;
+  Selector selector1;
+  Selector selector2;
+
+  selector1.Add(std::make_unique<Leaf>([&]{return simple_action(check_conditions, action_executed);}));
+  EXPECT_EQ(selector1.Tick(),Status::kFailure);
+  selector2.Add(std::make_unique<Leaf>([&]{return simple_action(check_conditions, action_executed);}));
+  EXPECT_EQ(selector2.Tick(),Status::kFailure);
+  selector1.Reset();
+  selector2.Reset();
+  check_conditions = true;
+  EXPECT_EQ(selector1.Tick(), Status::kRunning);
+  EXPECT_EQ(selector2.Tick(), Status::kRunning);
+
+  action_executed = true;
+  EXPECT_EQ(selector1.Tick(), Status::kSuccess);
+  EXPECT_EQ(selector1.Tick(), Status::kSuccess);
+  EXPECT_EQ(selector2.Tick(), Status::kSuccess);
+  EXPECT_EQ(selector2.Tick(), Status::kSuccess);
 }
