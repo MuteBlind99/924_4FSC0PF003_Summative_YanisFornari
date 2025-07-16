@@ -4,7 +4,15 @@
 file(GLOB_RECURSE SRC_FILES src/*.cc)
 file(GLOB_RECURSE HEADER_FILES include/*.h)
 
-add_executable(2_Factorize ${SRC_FILES} ${HEADER_FILES})
+add_executable(2_Factorize ${SRC_FILES} ${HEADER_FILES}
+        include/key_manager.h
+        src/key_manager.cc
+        include/render_manager.h
+        src/render_manager.cc
+        include/event_manager.h
+        src/event_manager.cc
+        src/text_manager.cc
+        include/Text_manager.h)
 target_include_directories(2_Factorize PRIVATE include/)
 
 target_link_libraries(2_Factorize PUBLIC SFML::System SFML::Graphics SFML::Window)

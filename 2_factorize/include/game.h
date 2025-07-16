@@ -7,7 +7,11 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "event_manager.h"
 #include "game_sprite_manager.h"
+#include "key_manager.h"
+#include "render_manager.h"
+#include "text_manager.h"
 
 // Classe principale du jeu
 class Game {
@@ -18,13 +22,17 @@ class Game {
     sf::Font font_;
     sf::Text info_text_;
     sf::Text instructions_text_;
+    KeyManager key_manager_;
+    Render_Manager render_manager_;
+    Event_Manager event_manager_;
+    Text_Manager text_manager_;
 
 public:
     Game();
     void Run();
 
 private:
-    void SetupText();void HandleMousePressed(const sf::Event::MouseButtonPressed*mousePressed);
+    void HandleMousePressed(const sf::Event::MouseButtonPressed*mousePressed);
     void HandleKeyPress(sf::Keyboard::Key key);
 
     void HandleEvents();
